@@ -1,0 +1,16 @@
+{
+  "name": "bot_viewer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bot inventory and price viewer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lasse Schier Christiansen",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "express-handlebars": "^3.0.0"
+  }
+}

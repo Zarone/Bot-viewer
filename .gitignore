@@ -1,0 +1,5 @@
+#ignore packages installed by npm
+node_bodules
+*~
+.DS_Store
+credentials.js
