@@ -8,8 +8,10 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "ejs": "^2.5.7",
     "express": "^4.16.2",
     "express-handlebars": "^3.0.0",
+    "graceful-fs": "^4.1.11",
     "morgan": "^1.9.0",
     "tf2-items": "^1.1.6"
   }

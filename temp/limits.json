@@ -1,13 +1,13 @@
 {
-	"The Team Captain": null,
+	"The Team Captain": -1,
 	"Name Tag": 5,
-	"Non-Craftable Tour of Duty Ticket": null,
-	"Mann Co. Supply Crate Key": null,
+	"Non-Craftable Tour of Duty Ticket": -1,
+	"Mann Co. Supply Crate Key": -1,
 	"Strange Frying Pan": 1,
 	"Strange Australium Rocket Launcher": 1,
 	"Professional Killstreak AWPer Hand": 1,
-	"The Frying Pan": null,
-	"Tour of Duty Ticket": null,
-	"The War Pig": null,
-	"Secret Saxton": null
+	"The Frying Pan": -1,
+	"Tour of Duty Ticket": -1,
+	"The War Pig": -1,
+	"Secret Saxton": 5
 }
