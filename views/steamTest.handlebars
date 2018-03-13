@@ -1,0 +1,8 @@
+<div class="entry">
+     {{#if user}}
+        <p>Steam ID: {{{user.id}}}</p>
+        <p>Name: {{{user.displayName}}}</p>
+    {{else}}
+        <h2><a href="auth/steam">Sign in with steam</a></h2>
+    {{/if}}
+</div>

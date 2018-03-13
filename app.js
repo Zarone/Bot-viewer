@@ -6,6 +6,12 @@ var fs = require('graceful-fs');
 var async = require('async');
 var Item = require('./app/item.js');
 
+var util = require('util')
+var session = require('express-session');
+var passport = require('passport');
+var SteamStrategy = require('passport-steam').Strategy;
+
+
 var config = require('./config.json');
 
 var Items = new TF2Items({
@@ -17,8 +23,37 @@ Items.init(function(err) {
         console.log(err);
         process.exit(1);
     }
-    console.log("klar");
+    console.log("Schema ready");
 });
+
+
+passport.serializeUser(function (user, done) {
+    done(null, user);
+});
+
+passport.deserializeUser(function (obj, done) {
+    done(null, obj);
+});
+
+
+passport.use(new SteamStrategy({
+    returnURL: 'http://localhost:3000/auth/steam/return',
+    realm: 'http://localhost:3000/',
+    apiKey: '3F472E4A61FB60C1A03069B06D7AB8C0'
+},
+    function (identifier, profile, done) {
+        // asynchronous verification, for effect...
+        process.nextTick(function () {
+
+            // To keep the example simple, the user's Steam profile is returned to
+            // represent the logged-in user.  In a typical application, you would want
+            // to associate the Steam account with a user record in your database,
+            // and return that user instead.
+            profile.identifier = identifier;
+            return done(null, profile);
+        });
+    }
+));
 
 var hbs = handlebars.create({ defaultLayout: 'main' });
 var app = express();
@@ -29,6 +64,16 @@ app.use(require('body-parser').urlencoded({ extended: true }));
 app.disable('X-Powered-By');
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
+
+app.use(session({
+    secret: 'your secret',
+    name: 'name of session id',
+    resave: true,
+    saveUninitialized: true
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(express.static(__dirname + '/public'));
 
@@ -58,6 +103,32 @@ app.get('/', function (req, res) {
     
 });
 
+app.get('/steam', function(req, res){
+    res.render('steamTest', { user: req.user });
+})
+
+app.get('/account', ensureAuthenticated, function (req, res) {
+    res.render('account', { user: req.user });
+});
+
+app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/');
+});
+
+app.get('/auth/steam',
+    passport.authenticate('steam', { failureRedirect: '/' }),
+    function(req, res) {
+        res.redirect('/');
+    }
+);
+
+app.get('/auth/steam/return',
+    passport.authenticate('steam', { failureRedirect: '/' }),
+    function (req, res) {
+        res.redirect('/');
+    });
+
 app.use(function (err, req, res, next) {
     console.log(err);
     res.status(err.status || 500).json({ response: { success: false } });
@@ -66,6 +137,11 @@ app.use(function (err, req, res, next) {
 var server = app.listen(3000, function () {
     console.log('Listening on port 3000');
 });
+
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) { return next(); }
+    res.redirect('/');
+}
 
 function getMeta(callback){
     async.series({
